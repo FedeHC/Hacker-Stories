@@ -58,10 +58,50 @@
   background-color: #ff6600;
 }
 
-ul, ol {
-  list-style-type: none;
-  margin: 0;
-  padding: 0;
+.tableStories {
+  border: 0;
+  display: grid;
+}
+
+.rowStories1, .rowStories2 {
+  display: grid;
+  padding: 10px 0 10px 0;
+  border-radius: 5px;
+}
+
+.rowStories1 {
+  background-color: #ffe2cf;
+}
+
+.rowStories2 {
+  background-color: inherit;
+}
+
+@media only screen and (max-width: 599px) {
+  .rowStories1, .rowStories2 {
+    grid-template-columns: 10% auto 6%;
+  }
+}
+
+@media only screen and (min-width: 600px) {
+  .rowStories1, .rowStories2 {
+    grid-template-columns: 5% 90% auto;
+  }
+}
+
+.firstCol {
+  grid-column: 1 / 2;
+  text-align: center;
+}
+
+.secondCol {
+  grid-column: 2 / 3;
+  text-align: left;
+}
+
+.thirdCol {
+  grid-column: 3 / 3;
+  text-align: center;
 }
 
 .items {
@@ -74,38 +114,6 @@ ul, ol {
 .items:hover {
   outline: 2px solid #ff6600;
   border: 0;
-}
-
-@media only screen and (max-width: 599px) {
-  .containerSubItems {
-    display: grid;
-    grid-template-columns: 10% auto 6%;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  .containerSubItems {
-    display: grid;
-    grid-template-columns: 5% 90% auto;
-  }
-}
-
-.firstColSubItems {
-  grid-column: 1 / 2;
-  text-align: left;
-}
-
-.secondColSubItems {
-  grid-column: 2 / 3;
-}
-
-.thirdColSubItems {
-  grid-column: 3 / 3;
-}
-
-.numberField {
-  background-color: #272822;
-  color: white;
 }
 
 .fieldTitle {
@@ -125,27 +133,29 @@ ul, ol {
 }
 
 .linkField {
+  padding: 0 5px 0 5px;
   text-decoration: none;
   font-weight: bolder;
   color: #272822;
 }
 
 .linkField:hover {
+  padding: 0 5px 0 5px;
   color: white;
   background-color: #ff6600;
 }
 
 .buttonDiv {
   text-align: right;
-  word-break: break-word;
+  word-break: normal;
 }
 
 #dissmissButton {
   position: relative;
   display: inline-block;
+  margin-top: -1px;
   border: 0px solid;
   border-radius: 5px;
-  padding: 2px 5px 2px 5px;
   background-color: inherit;
   font-size: 18px;
 }
@@ -163,11 +173,11 @@ ul, ol {
   z-index: 1;
   width: auto;
   visibility: hidden;
+  padding: 7px;
   text-align: center;
   background-color: #ff6600;
   color: white;
   border-radius: 5px;
-  padding: 7px;
 }
 
 .buttonDiv:hover .buttonTooltip {
