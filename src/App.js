@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useReducer, useCallback } from "react";
+import { useState, useEffect, useRef, useReducer, useCallback, memo } from "react";
 import "./App.css";
 import logo from "./img/favicon.png";
 import axios from 'axios';
@@ -10,19 +10,25 @@ const API_ENDPOINT = 'https://hn.algolia.com/api/v1/search?query=';
 // URL Comments:
 const URL_COMMENTS = 'https://news.ycombinator.com/item?id=';
 
-
 // Custom hook:
 const useSemiPersistentState = (key, initialState = "") => {
-  const [value, setValue] = useState(
-    localStorage.getItem(key) || initialState);
+  // Create ref hook for keep a made-up state:
+  const isMounted = useRef(false);
 
+  // Create state hook for keeping an input value via localStorage:
+  const [value, setValue] = useState(localStorage.getItem(key) || initialState);
+  
+  // Calling useEffect hook for saving the input value, but only on each re-rendering: 
   useEffect(() => {
-    localStorage.setItem(key, value);
+    if (!isMounted.current) {           // If not mounted...
+      isMounted.current = true;
+    } else {                            // If mounted...
+      localStorage.setItem(key, value);
+    }
   }, [value, key]);
 
   return [value, setValue];
 }
-
 
 function App() {
   // --------------------------------------------------------------------------
@@ -117,16 +123,20 @@ function App() {
     event.preventDefault();
   };
 
-  const handleRemoveStory = (item) => {
+  // Using useCallback (with an empty array) to disable re-rendering if inputSearch
+  // changes:
+  const handleRemoveStory = useCallback((item) => {
     dispatchStories({
       type: 'REMOVE_STORY',
       payload: item,
     });
-  };
+  }, []);
 
   // --------------------------------------------------------------------------
   // JSX
   // --------------------------------------------------------------------------
+  
+  // console.log("[APP]");
   return (
     <>
       <img src={logo} className="imageLogo" alt="" />
@@ -150,11 +160,15 @@ function App() {
           <>
             <SearchForm searchTerm={searchTerm}
                         onSearchInput={handleSearchInput}
-                        onSearchSubmit={handleSearchSubmit}
-            />
-            <TableStories list={stories.data}
-                          onRemoveItem={handleRemoveStory}
-            />
+                        onSearchSubmit={handleSearchSubmit} />
+            <table className="tableStories">
+              <tbody>
+                <TableStories list={stories.data}
+                              onRemoveItem={handleRemoveStory} />
+              </tbody>
+            </table>
+
+            <br/>
           </>
         }
       </div>
@@ -163,7 +177,7 @@ function App() {
 }
 
 // --------------------------------------------------------------------------
-// SUBCOMPONENTS
+// SUB-COMPONENTS
 // --------------------------------------------------------------------------
 
 const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
@@ -211,29 +225,20 @@ function InputWithLabel({ id, value, type, onInputChange, isFocused, children })
   );
 }
 
-function TableStories({ list, onRemoveItem }) {
-  return (
-    <>
-      <table className="tableStories">
-        <tbody>
-          {list.map( (item, index) => (
-            <RowStory key={item.objectID}
-                      item={item}
-                      index={index}
-                      onRemoveItem={onRemoveItem} />
-          ))}
-        </tbody>
-      </table>
-      <br/>
-    </>
-  );
-}
+const TableStories = memo( function ({ list, onRemoveItem }) {
+  // console.log("[LIST]");
+  return list.map( (item, index) => (
+    <RowStory key={item.objectID}
+              item={item}
+              index={index}
+              onRemoveItem={onRemoveItem} />
+  ))
+});
 
 function RowStory({ item, index, onRemoveItem }) {
-  const dateStory = new Date(item.created_at).toLocaleDateString(); // Date.
-  const timeStory = new Date(item.created_at).toLocaleTimeString(); // Time.
-  const fullDateStory = dateStory + ' ' + timeStory;                // Date+Time.
-  index = parseInt(index) + 1;                // Parse index to integer and sum 1.
+  const dateStory = new Date(item.created_at).toLocaleDateString() + ' ' +
+                    new Date(item.created_at).toLocaleTimeString();
+  index += 1;
 
   return (
     <>
@@ -241,12 +246,12 @@ function RowStory({ item, index, onRemoveItem }) {
         <td className="firstCol">{'#' + index + ' '}</td>
 
         <td className="secondCol">
-          <span className="fieldTitle">Title: </span>
-          <a href={item.url}
+          <span className="fieldTitle">{ item.title? "Title: " : "Comment: "}</span>
+          <a href={item.url ? item.url : URL_COMMENTS + item.objectID}
              className="linkField"
              target="_blank"
              rel="noreferrer"
-          >{item.title}</a>
+          >{item.title ? item.title : '[Link]'}</a>
           <br/>
 
           <span className="fieldTitle">Author/s: </span>
@@ -254,19 +259,23 @@ function RowStory({ item, index, onRemoveItem }) {
           <br/>
 
           <span className="fieldTitle">Date: </span>
-          <span className="fieldData">{fullDateStory}</span>
+          <span className="fieldData">{dateStory}</span>
           <br/>
 
-          <span className="fieldTitle">Comments: </span>
-          <a href={URL_COMMENTS + item.objectID}
-             className="linkField"
-             target="_blank"
-             rel="noreferrer"
-          >{item.num_comments}</a>
-          <br/>
+          {item.title &&
+          <>
+            <span className="fieldTitle">Comments: </span>
+            <a href={URL_COMMENTS + item.objectID}
+               className="linkField"
+               target="_blank"
+               rel="noreferrer"
+            >{item.num_comments}</a>
+            <br/>
+          </>
+          }
 
           <span className="fieldTitle">Points: </span>
-          <span className="fieldData">{item.points}</span>
+          <span className="fieldData">{item.points ? item.points : '-'}</span>
           <br/>
         </td>
 
@@ -285,3 +294,5 @@ function RowStory({ item, index, onRemoveItem }) {
 }
 
 export default App;
+export { SearchForm, InputWithLabel, TableStories, RowStory };
+

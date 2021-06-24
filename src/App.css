@@ -30,12 +30,14 @@
   outline: 1px solid #ff6600;
   border-radius: 5px;
   padding: 2px 0 2px 5px;
+  transition: all 0.2s ease-in;
 }
 
 #searchInput:focus {
   outline: none;
   border: 0;
-  outline: 2px solid #ff6600; 
+  outline: 2px solid #ff6600;
+  transition: all 0.2s ease-in;
 }
 
 #submitButton {
@@ -47,11 +49,13 @@
   border-radius: 5px;
   padding: 4px 10px 2px 10px;
   margin: 0 0 0 10px;
+  transition: all 0.15s ease-in;
 }
 
 #submitButton:hover {
   background-color: #ffd0b0;
-  outline: 2px solid #ff6600;  
+  outline: 2px solid #ff6600;
+  transition: all 0.15s ease-in;
 }
 
 #submitButton:active {
@@ -65,16 +69,25 @@
 
 .rowStories1, .rowStories2 {
   display: grid;
+  margin: 0;
   padding: 10px 0 10px 0;
+  border: 0;
   border-radius: 5px;
+  transition: all 0.1s ease-in;
+}
+
+.rowStories1:hover, .rowStories2:hover {
+  outline: 2px solid #ff6600;
+  transition: all 0.1s ease-in;
 }
 
 .rowStories1 {
-  background-color: #ffe2cf;
+  background-color: inherit;
 }
 
+
 .rowStories2 {
-  background-color: inherit;
+  background-color: #ffe2cf;
 }
 
 @media only screen and (max-width: 599px) {
@@ -91,7 +104,7 @@
 
 .firstCol {
   grid-column: 1 / 2;
-  text-align: center;
+  text-align: left;
 }
 
 .secondCol {
@@ -101,19 +114,7 @@
 
 .thirdCol {
   grid-column: 3 / 3;
-  text-align: center;
-}
-
-.items {
-  margin: 0 0 20px 0;
-  padding: 20px 20px 10px 20px;
-  background-color: white;
-  border-radius: 5px;
-}
-
-.items:hover {
-  outline: 2px solid #ff6600;
-  border: 0;
+  text-align: left;
 }
 
 .fieldTitle {
@@ -143,6 +144,7 @@
   padding: 0 5px 0 5px;
   color: white;
   background-color: #ff6600;
+  transition: all 0.15s ease-in;
 }
 
 .buttonDiv {
@@ -162,6 +164,7 @@
 
 #dissmissButton:hover {
   background-color: #ffd0b0;
+  transition: all 0.15s ease-in;
 }
 
 #dissmissButton:active {
@@ -182,4 +185,5 @@
 
 .buttonDiv:hover .buttonTooltip {
   visibility: visible;
+  transition: all 0.15s ease-in;
 }
