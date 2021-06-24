@@ -1,7 +1,7 @@
 .imageLogo {
   width: 50px;
   margin: 0 0 0 14px;
-  background-image: url("./img/favicon.png") no-repeat;
+  background-image: url("./shared/img/favicon.png") no-repeat;
 }
 
 .divApp {
