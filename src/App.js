@@ -1,7 +1,10 @@
+// Libraries:
 import { useState, useEffect, useReducer, useCallback } from "react";
 import "./App.css";
 import logo from "./shared/img/favicon.png";
 import axios from 'axios';
+
+// Subcomponents:
 import useSemiPersistentState from "./shared/subcomponents/SemiPersistentState";
 import SearchForm from "./shared/subcomponents/SearchForm";
 import TableStories from "./shared/subcomponents/TableStories";
@@ -21,7 +24,7 @@ function App() {
       case 'STORIES_FETCH_INIT':
         return {
           ...state,
-          isLoading: true,          // Setting loading condition.
+          isLoading: true,            // Setting loading condition.
           isError: false,
         };
       case 'STORIES_FETCH_SUCCESS':
@@ -29,14 +32,14 @@ function App() {
           ...state,
           isLoading: false,
           isError: false,
-          data: action.payload,     // Updating array with results.
+          data: action.payload,       // Updating array with results.
         };
       case 'STORIES_FETCH_FAILURE':
         return {
           ...state,
           isLoading: false,
-          isError: true,            // Setting error condition.
-          errorMsg: action.payload, // Return string with error message.
+          isError: true,              // Setting error condition.
+          errorMsg: action.payload,   // Return string with error message.
         };
       case 'REMOVE_STORY':
         return {
@@ -71,7 +74,7 @@ function App() {
           type: 'STORIES_FETCH_SUCCESS',
           payload: result.data.hits,
         });
-    } catch (error) {                                 // Catch errors if any.
+    } catch (error) {                                 // Catch any errors while fetching data.
       dispatchStories(
         {
           type: 'STORIES_FETCH_FAILURE',
@@ -98,12 +101,12 @@ function App() {
   };
 
   // Using useCallback to disable re-rendering if inputSearch changes:
-  const handleRemoveStory = useCallback((item) => {
+  const handleRemoveStory = useCallback( (item) => {
     dispatchStories({
       type: 'REMOVE_STORY',
       payload: item,
     });
-  }, []); // Empty array (only re-render after changes on input)
+  }, []);
 
   // --------------------------------------------------------------------------
   // JSX
@@ -113,6 +116,7 @@ function App() {
   return (
     <>
       <img src={logo} className="imageLogo" alt="" />
+  
       <div className="divApp">
         <h1>Hacker Stories</h1>
 
@@ -135,7 +139,7 @@ function App() {
                         onSearchInput={handleSearchInput}
                         onSearchSubmit={handleSearchSubmit} />
             <table className="tableStories">
-              <tbody>
+              <tbody id="bodyTable">
                 <TableStories list={stories.data}
                               onRemoveItem={handleRemoveStory} />
               </tbody>

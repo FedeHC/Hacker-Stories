@@ -1,15 +1,17 @@
 .imageLogo {
+  display: block;
+  grid-column: 2 / 3;
   width: 50px;
-  margin: 0 0 0 14px;
+  margin: 0 0 0 18px;
   background-image: url("./shared/img/favicon.png") no-repeat;
 }
 
 .divApp {
-  grid-column: 1 / 2;
+  grid-column: 2 / 3;
   border-radius: 10px;
   background-color: whitesmoke;
   color: #272822;
-  margin: 0 0 20px 20px;
+  margin: 10px 0 20px 20px;
   padding: 0px 30px 30px 30px;
 }
 
@@ -62,22 +64,37 @@
   background-color: #ff6600;
 }
 
+#bodyTable {
+  overflow-x: auto;
+}
+
 .tableStories {
-  border: 0;
+  border: 0px solid white;
   display: grid;
 }
 
+.rowStoriesHead {
+  padding: 10px;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.rowStoriesHead th, .rowStories1 td, .rowStories2 td {
+  padding: 5px;
+}
+
+#titleHead {
+  padding-left: 10px;
+}
+
 .rowStories1, .rowStories2 {
-  display: grid;
-  margin: 0;
-  padding: 10px 0 10px 0;
-  border: 0;
-  border-radius: 5px;
+  text-align: left;
   transition: all 0.1s ease-in;
 }
 
 .rowStories1:hover, .rowStories2:hover {
   outline: 2px solid #ff6600;
+  border-radius: 5px;
   transition: all 0.1s ease-in;
 }
 
@@ -85,52 +102,18 @@
   background-color: inherit;
 }
 
-
 .rowStories2 {
   background-color: #ffe2cf;
 }
 
-@media only screen and (max-width: 599px) {
-  .rowStories1, .rowStories2 {
-    grid-template-columns: 10% auto 6%;
-  }
-}
-
-@media only screen and (min-width: 600px) {
-  .rowStories1, .rowStories2 {
-    grid-template-columns: 5% 90% auto;
-  }
-}
-
-.firstCol {
-  grid-column: 1 / 2;
-  text-align: left;
-}
-
-.secondCol {
-  grid-column: 2 / 3;
-  text-align: left;
-}
-
-.thirdCol {
-  grid-column: 3 / 3;
-  text-align: left;
-}
-
-.fieldTitle {
-  font-weight: lighter;
-  color: grey;
-  word-break: keep-all;
-}
-
 .fieldData{
   font-weight: normal;
-  word-break: break-all;
+  white-space: nowrap;
 }
 
 .fieldDataBold{
   font-weight: bolder;
-  word-break: break-all;
+  white-space: nowrap;
 }
 
 .linkField {
@@ -138,6 +121,7 @@
   text-decoration: none;
   font-weight: bolder;
   color: #272822;
+  word-break: normal;
 }
 
 .linkField:hover {
@@ -147,43 +131,41 @@
   transition: all 0.15s ease-in;
 }
 
-.buttonDiv {
-  text-align: right;
-  word-break: normal;
+.buttonCol {
+  text-align: center;
 }
 
-#dissmissButton {
+#dismissButton {
   position: relative;
   display: inline-block;
-  margin-top: -1px;
   border: 0px solid;
   border-radius: 5px;
   background-color: inherit;
   font-size: 18px;
+  text-align: center;
 }
 
-#dissmissButton:hover {
+#dismissButton:hover {
   background-color: #ffd0b0;
   transition: all 0.15s ease-in;
 }
 
-#dissmissButton:active {
+#dismissButton:active {
   background-color: #ff6600;
 }
 
-.buttonDiv .buttonTooltip {
+.buttonSpan .buttonTooltip {
   position: absolute;
   z-index: 1;
   width: auto;
   visibility: hidden;
   padding: 7px;
-  text-align: center;
   background-color: #ff6600;
   color: white;
   border-radius: 5px;
 }
 
-.buttonDiv:hover .buttonTooltip {
+.buttonSpan:hover .buttonTooltip {
   visibility: visible;
   transition: all 0.15s ease-in;
 }

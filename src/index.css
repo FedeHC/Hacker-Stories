@@ -1,5 +1,5 @@
 html, body {
-  background: linear-gradient(90deg, #ff6600 0%, #bd4b00 100%) repeat;
+  background: linear-gradient(90deg, #bd4b00 0%, #ff6600 100%) repeat;
   color: #272822;
   font-family: sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -8,25 +8,17 @@ html, body {
   font-size: 16px;
 }
 
-@media only screen and (max-width: 599px) {
-  #root { grid-template-columns: 95% auto; }
-}
-
-@media only screen and (min-width: 600px) {
-  #root { grid-template-columns: 90% auto; }
-}
-
-@media only screen and (min-width: 1000px) {
-  #root { grid-template-columns: 75% auto; }
-}
-
-@media only screen and (min-width: 1200px) {
-  #root { grid-template-columns: 60% auto; }
-}
-
 #root {
   display: grid;
-  grid-gap: 10px;
   margin: 0;
   padding: 0;
 }
+
+@media only screen and (max-width: 599px) {
+  #root { grid-template-columns: 0% 100% 0%}
+}
+
+@media only screen and (min-width: 600px) {
+  #root { grid-template-columns: 5% 90% 5%; }
+}
+

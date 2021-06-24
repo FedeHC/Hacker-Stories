@@ -3,57 +3,60 @@ import { URL_COMMENTS } from "../urls";
 
 // Subcomponent RowStory:
 function RowStory({ item, index, onRemoveItem }) {
+  // Get datetime string with "dd/mm/yyyy hh:mm" format:
   const dateStory = new Date(item.created_at).toLocaleDateString() + ' ' +
-                    new Date(item.created_at).toLocaleTimeString();
+    new Date(item.created_at).toLocaleTimeString().split(":").slice(0, -1).join(":");
   index += 1;
 
   return (
     <>
+      {/* Row */}
       <tr className={index % 2 === 0 ? "rowStories1" : "rowStories2"}>
-        <td className="firstCol">{'#' + index + ' '}</td>
-
-        <td className="secondCol">
-          <span className="fieldTitle">{ item.title? "Title: " : "Comment: "}</span>
+        {/* # */}
+        <td>{index}</td>
+        
+        {/* Title/Comment */}
+        <td>
           <a href={item.url ? item.url : URL_COMMENTS + item.objectID}
              className="linkField"
              target="_blank"
-             rel="noreferrer"
-          >{item.title ? item.title : '[Link]'}</a>
-          <br/>
+             rel="noreferrer">
+            <i>{item.title ? item.title : '(Link to HN comment)'}</i>
+          </a>
+        </td>
 
-          <span className="fieldTitle">Author/s: </span>
-          <span className="fieldData">{item.author}</span>
-          <br/>
+        {/* Author/s */}
+        <td><span className="fieldData">{item.author}</span></td>
 
-          <span className="fieldTitle">Date: </span>
-          <span className="fieldData">{dateStory}</span>
-          <br/>
+        {/* Date */}
+        <td><span className="fieldData">{dateStory}</span></td>
 
-          {item.title &&
-          <>
-            <span className="fieldTitle">Comments: </span>
+        {/* # Comments */}
+        {item.title ? (
+          <td>
             <a href={URL_COMMENTS + item.objectID}
                className="linkField"
                target="_blank"
                rel="noreferrer"
             >{item.num_comments}</a>
-            <br/>
-          </>
-          }
-
-          <span className="fieldTitle">Points: </span>
-          <span className="fieldData">{item.points ? item.points : '-'}</span>
-          <br/>
-        </td>
-
-        <td className="thirdCol">
-          <div className="buttonDiv">
-            <button id="dissmissButton"
+          </td>
+          ) : (
+          <td>-</td>
+          )
+        }
+        
+        {/* Points */}
+        <td><span className="fieldData">{item.points ? item.points : '-'}</span></td>
+        
+        {/* Dismiss */}
+        <td className="buttonCol">
+          <span className="buttonSpan">
+            <button id="dismissButton"
                     type="button"
                     onClick={() => onRemoveItem(item)}
             >❌</button>
             <span className="buttonTooltip">Dismiss this story</span>
-          </div>
+          </span>
         </td>
       </tr>
     </>
