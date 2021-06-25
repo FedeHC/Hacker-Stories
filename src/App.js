@@ -24,12 +24,14 @@ function App() {
       case 'STORIES_FETCH_INIT':
         return {
           ...state,
+          isInit: false,
           isLoading: true,            // Setting loading condition.
           isError: false,
         };
       case 'STORIES_FETCH_SUCCESS':
         return {
           ...state,
+          isInit: false,
           isLoading: false,
           isError: false,
           data: action.payload,       // Updating array with results.
@@ -37,6 +39,7 @@ function App() {
       case 'STORIES_FETCH_FAILURE':
         return {
           ...state,
+          isInit: false,
           isLoading: false,
           isError: true,              // Setting error condition.
           errorMsg: action.payload,   // Return string with error message.
@@ -56,6 +59,7 @@ function App() {
   // Reducer Object:
   const reducerObject = {
     data: [],
+    isInit: true,
     isLoading: false,
     isError: false
   };
@@ -121,7 +125,7 @@ function App() {
         <h1>Hacker Stories</h1>
 
         {/* Show if ERROR */}
-        {stories.isError &&
+        {!stories.isStarting && stories.isError &&
           <>
             <p className="subTitle">Sorry, something went wrong when searching for data. :(
             <br />Try again later.</p><br />
@@ -130,10 +134,10 @@ function App() {
         }
 
         {/* Show while LOADING */}
-        {stories.isLoading && <p className="subTitle">Loading...</p>}
+        {!stories.isStarting && stories.isLoading && <p className="subTitle">Loading...</p>}
 
         {/* Show when LOADED */}
-        {!stories.isLoading && !stories.isError &&
+        {!stories.isStarting && !stories.isLoading && !stories.isError &&
           <>
             <SearchForm searchTerm={searchTerm}
                         onSearchInput={handleSearchInput}

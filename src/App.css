@@ -111,11 +111,6 @@
   white-space: nowrap;
 }
 
-.fieldDataBold{
-  font-weight: bolder;
-  white-space: nowrap;
-}
-
 .linkField {
   padding: 0 5px 0 5px;
   text-decoration: none;
