@@ -12,8 +12,16 @@ import { API_ENDPOINT } from "./shared/urls";
 
 
 function App() {
-  // Using custom hook:
+  // Using custom hook for keeping record of the input value:
   const [searchTerm, setSearchTerm] = useSemiPersistentState("search", "React");
+
+  // Table columns states:
+  const [lastField, setLastField] = useState('');
+  const [titleOrder, setTitleOrder] = useState('');
+  const [authorOrder, setAuthorOrder] = useState('');
+  const [dateOrder, setDateOrder] = useState('');
+  const [commentsOrder, setCommentsOrder] = useState('');
+  const [pointsOrder, setPointsOrder] = useState('');
 
   // URL state:
   const [url, setUrl] = useState(`${API_ENDPOINT}${searchTerm}`);
@@ -24,14 +32,14 @@ function App() {
       case 'STORIES_FETCH_INIT':
         return {
           ...state,
-          isInit: false,
+          isOnInit: false,
           isLoading: true,            // Setting loading condition.
           isError: false,
         };
       case 'STORIES_FETCH_SUCCESS':
         return {
           ...state,
-          isInit: false,
+          isOnInit: false,
           isLoading: false,
           isError: false,
           data: action.payload,       // Updating array with results.
@@ -39,7 +47,7 @@ function App() {
       case 'STORIES_FETCH_FAILURE':
         return {
           ...state,
-          isInit: false,
+          isOnInit: false,
           isLoading: false,
           isError: true,              // Setting error condition.
           errorMsg: action.payload,   // Return string with error message.
@@ -59,7 +67,7 @@ function App() {
   // Reducer Object:
   const reducerObject = {
     data: [],
-    isInit: true,
+    isOnInit: true,
     isLoading: false,
     isError: false
   };
@@ -67,7 +75,10 @@ function App() {
   // useReducer:
   const [stories, dispatchStories] = useReducer(storiesReducer, reducerObject);
 
-  // Fetch stories:
+  // --------------------------------------------------------------------------
+  // Handlers
+  // --------------------------------------------------------------------------
+
   const handleFetchStories = useCallback(async () => {
     dispatchStories({ type: 'STORIES_FETCH_INIT' });  // Call dispatch to change to loading state.
 
@@ -91,10 +102,6 @@ function App() {
     handleFetchStories();
   }, [handleFetchStories]);
 
-  // --------------------------------------------------------------------------
-  // Handlers
-  // --------------------------------------------------------------------------
-
   const handleSearchInput = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -112,11 +119,86 @@ function App() {
     });
   }, []);
 
+  // Functions for showing arrows on top of the columns for ordering (if clicked): 
+  const handleTitleArrow = () => {
+    titleOrder === '↑' ? setTitleOrder('↓') : setTitleOrder('↑');
+    setLastField('title');
+  }
+
+  const handleAuthorArrow = () => {
+    authorOrder === '↑' ? setAuthorOrder('↓') : setAuthorOrder('↑');    
+    setLastField('author');
+  }
+
+  const handleDateArrow = () => {
+    dateOrder === '↑' ? setDateOrder('↓') : setDateOrder('↑');
+    setLastField('date');
+  }
+
+  const handleCommentsArrow = () => {
+    commentsOrder === '↑' ? setCommentsOrder('↓') : setCommentsOrder('↑');
+    setLastField('comments');
+  }
+
+  const handlePointsArrow = () => {
+    pointsOrder === '↑' ? setPointsOrder('↓') : setPointsOrder('↑');
+    setLastField('points');
+  }
+
+  // Function for the sort array function:
+  const handleFunctionOrder = (field, fieldOrder) => {
+    if(fieldOrder === ''){
+      return undefined;
+    }
+    else if(fieldOrder === '↑') {      
+      return (a, b) => {
+        if (a[field].toLowerCase() < b[field].toLowerCase())
+          return -1;
+        if (a[field].toLowerCase() > b[field].toLowerCase())
+          return 1;
+        return 0;
+      }
+    }
+    else if(fieldOrder === '↓') {
+      return (a, b) => {
+        if (a[field].toLowerCase() > b[field].toLowerCase())
+          return -1;
+        if (a[field].toLowerCase() < b[field].toLowerCase())
+          return 1;
+        return 0;
+      }
+    }
+  }
+
+  const handleLastOrder = () => {
+    let lastOrder;
+      switch(lastField){
+        case 'title':
+          lastOrder = titleOrder;
+          break;
+        case 'author':
+          lastOrder = authorOrder;
+          break;
+        case 'date':
+          lastOrder = dateOrder;
+          break;
+        case 'comments':
+          lastOrder = commentsOrder;
+          break;
+        case 'points':
+          lastOrder = pointsOrder;
+          break;
+        default:
+          lastOrder = '';
+          break;
+      }
+    return lastOrder;
+  }
+
   // --------------------------------------------------------------------------
   // JSX
   // --------------------------------------------------------------------------
   
-  // console.log("[APP]");
   return (
     <>
       <img src={logo} className="imageLogo" alt="" />
@@ -125,7 +207,7 @@ function App() {
         <h1>Hacker Stories</h1>
 
         {/* Show if ERROR */}
-        {!stories.isStarting && stories.isError &&
+        {!stories.isOnInit && stories.isError &&
           <>
             <p className="subTitle">Sorry, something went wrong when searching for data. :(
             <br />Try again later.</p><br />
@@ -134,10 +216,10 @@ function App() {
         }
 
         {/* Show while LOADING */}
-        {!stories.isStarting && stories.isLoading && <p className="subTitle">Loading...</p>}
+        {!stories.isOnInit && stories.isLoading && <p className="subTitle">Loading...</p>}
 
         {/* Show when LOADED */}
-        {!stories.isStarting && !stories.isLoading && !stories.isError &&
+        {!stories.isOnInit && !stories.isLoading && !stories.isError &&
           <>
             <SearchForm searchTerm={searchTerm}
                         onSearchInput={handleSearchInput}
@@ -145,7 +227,22 @@ function App() {
             <table className="tableStories">
               <tbody id="bodyTable">
                 <TableStories list={stories.data}
-                              onRemoveItem={handleRemoveStory} />
+                              onRemoveItem={handleRemoveStory}
+
+                              lastField={lastField}
+                              onFunctionOrder={handleFunctionOrder}
+                              lastOrder={handleLastOrder}
+
+                              titleOrder={titleOrder}
+                              onTitleArrow={handleTitleArrow}
+                              authorOrder={authorOrder}
+                              onAuthorArrow={handleAuthorArrow}
+                              dateOrder={dateOrder}
+                              onDateArrow={handleDateArrow}
+                              commentsOrder={commentsOrder}
+                              onCommentsArrow={handleCommentsArrow}
+                              pointsOrder={pointsOrder}
+                              onPointsArrow={handlePointsArrow} />
               </tbody>
             </table>
 
