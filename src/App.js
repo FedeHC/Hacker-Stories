@@ -15,18 +15,10 @@ function App() {
   // Using custom hook for keeping record of the input value:
   const [searchTerm, setSearchTerm] = useSemiPersistentState("search", "React");
 
-  // Table columns states:
-  const [lastField, setLastField] = useState('');
-  const [titleOrder, setTitleOrder] = useState('');
-  const [authorOrder, setAuthorOrder] = useState('');
-  const [dateOrder, setDateOrder] = useState('');
-  const [commentsOrder, setCommentsOrder] = useState('');
-  const [pointsOrder, setPointsOrder] = useState('');
-
   // URL state:
   const [url, setUrl] = useState(`${API_ENDPOINT}${searchTerm}`);
 
-  // useReducer function:
+  // Reducer stories function:
   const storiesReducer = (state, action) => {
     switch (action.type) {
       case 'STORIES_FETCH_INIT':
@@ -64,17 +56,83 @@ function App() {
     }
   };
 
-  // Reducer Object:
-  const reducerObject = {
+  // Reducer initial stories object :
+  const reducerStoriesObj = {
     data: [],
     isOnInit: true,
     isLoading: false,
     isError: false
   };
 
-  // useReducer:
-  const [stories, dispatchStories] = useReducer(storiesReducer, reducerObject);
+  // useReducer for fetched stories:
+  const [stories, dispatchStories] = useReducer(storiesReducer, reducerStoriesObj);
 
+  // Reducer order function:
+  const orderReducer = (state, action) => {
+    switch (action.type) {
+      case 'TITLE':
+        return {
+          title: state.title === '↑' ? '↓' : '↑',
+          author: '',
+          created_at: '',
+          num_comments: '',
+          points: '',
+          lastField: action.type.toLowerCase()
+        };
+      case 'AUTHOR':
+        return {
+          title: '',
+          author: state.author === '↑' ? '↓' : '↑',
+          created_at: '',
+          num_comments: '',
+          points: '',
+          lastField: action.type.toLowerCase()
+        };
+      case 'CREATED_AT':
+        return {
+          title: '',
+          author: '',
+          created_at: state.created_at === '↑' ? '↓' : '↑',
+          num_comments: '',
+          points: '',
+          lastField: action.type.toLowerCase()
+        };
+      case 'NUM_COMMENTS':
+        return {
+          title: '',
+          author: '',
+          created_at: '',
+          num_comments: state.num_comments === '↑' ? '↓' : '↑',
+          points: '',
+          lastField: action.type.toLowerCase()
+        };
+      case 'POINTS':
+        return {
+          title: '',
+          author: '',
+          created_at: '',
+          num_comments: '',
+          points: state.points === '↑' ? '↓' : '↑',
+          lastField: action.type.toLowerCase()
+        };
+      default:
+        throw new Error();
+    };
+  }
+
+    // Reducer initial order object :
+    const reducerOrderObj = {
+      title: '',
+      author: '',
+      created_at: '',
+      num_comments: '',
+      points: '↑',
+      lastField: ''
+    };
+  
+    // useReducer for asc/desc order in columns:
+    const [order, dispatchOrder] = useReducer(orderReducer, reducerOrderObj);
+  
   // --------------------------------------------------------------------------
   // Handlers
   // --------------------------------------------------------------------------
@@ -120,79 +178,55 @@ function App() {
   }, []);
 
   // Functions for showing arrows on top of the columns for ordering (if clicked): 
-  const handleTitleArrow = () => {
-    titleOrder === '↑' ? setTitleOrder('↓') : setTitleOrder('↑');
-    setLastField('title');
-  }
-
-  const handleAuthorArrow = () => {
-    authorOrder === '↑' ? setAuthorOrder('↓') : setAuthorOrder('↑');    
-    setLastField('author');
-  }
-
-  const handleDateArrow = () => {
-    dateOrder === '↑' ? setDateOrder('↓') : setDateOrder('↑');
-    setLastField('date');
-  }
-
-  const handleCommentsArrow = () => {
-    commentsOrder === '↑' ? setCommentsOrder('↓') : setCommentsOrder('↑');
-    setLastField('comments');
-  }
-
-  const handlePointsArrow = () => {
-    pointsOrder === '↑' ? setPointsOrder('↓') : setPointsOrder('↑');
-    setLastField('points');
+  const handleArrowField = (field) => {
+    dispatchOrder({ type: field.toUpperCase()})
   }
 
   // Function for the sort array function:
   const handleFunctionOrder = (field, fieldOrder) => {
     if(fieldOrder === ''){
-      return undefined;
+      return undefined;             // Return undefined to sort function.
     }
-    else if(fieldOrder === '↑') {      
+    else if(fieldOrder === '↑') {   // Ascending order.
       return (a, b) => {
-        if (a[field].toLowerCase() < b[field].toLowerCase())
-          return -1;
-        if (a[field].toLowerCase() > b[field].toLowerCase())
-          return 1;
-        return 0;
+        if (typeof a === 'string') {
+          if (a[field].toLowerCase() < b[field].toLowerCase())
+            return -1;
+          else if (a[field].toLowerCase() > b[field].toLowerCase())
+            return 1;
+          else
+            return 0;
+        }
+        else {
+          if (a[field] < b[field])
+            return -1;
+          else if (a[field] > b[field])
+            return 1;
+          else
+            return 0;
+        }
       }
     }
-    else if(fieldOrder === '↓') {
+    else if(fieldOrder === '↓') {   // Descending order.
       return (a, b) => {
-        if (a[field].toLowerCase() > b[field].toLowerCase())
-          return -1;
-        if (a[field].toLowerCase() < b[field].toLowerCase())
-          return 1;
-        return 0;
+        if (typeof a === 'string') {
+          if (a[field].toLowerCase() > b[field].toLowerCase())
+            return -1;
+          else if (a[field].toLowerCase() < b[field].toLowerCase())
+            return 1;
+          else
+            return 0;
+        }
+        else {
+          if (a[field] > b[field])
+            return -1;
+          else if (a[field] < b[field])
+            return 1;
+          else
+            return 0;
+        }
       }
     }
-  }
-
-  const handleLastOrder = () => {
-    let lastOrder;
-      switch(lastField){
-        case 'title':
-          lastOrder = titleOrder;
-          break;
-        case 'author':
-          lastOrder = authorOrder;
-          break;
-        case 'date':
-          lastOrder = dateOrder;
-          break;
-        case 'comments':
-          lastOrder = commentsOrder;
-          break;
-        case 'points':
-          lastOrder = pointsOrder;
-          break;
-        default:
-          lastOrder = '';
-          break;
-      }
-    return lastOrder;
   }
 
   // --------------------------------------------------------------------------
@@ -228,21 +262,9 @@ function App() {
               <tbody id="bodyTable">
                 <TableStories list={stories.data}
                               onRemoveItem={handleRemoveStory}
-
-                              lastField={lastField}
                               onFunctionOrder={handleFunctionOrder}
-                              lastOrder={handleLastOrder}
-
-                              titleOrder={titleOrder}
-                              onTitleArrow={handleTitleArrow}
-                              authorOrder={authorOrder}
-                              onAuthorArrow={handleAuthorArrow}
-                              dateOrder={dateOrder}
-                              onDateArrow={handleDateArrow}
-                              commentsOrder={commentsOrder}
-                              onCommentsArrow={handleCommentsArrow}
-                              pointsOrder={pointsOrder}
-                              onPointsArrow={handlePointsArrow} />
+                              order={order}
+                              onOrder={handleArrowField} />
               </tbody>
             </table>
 
