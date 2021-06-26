@@ -184,46 +184,31 @@ function App() {
 
   // Function for the sort array function:
   const handleFunctionOrder = (field, fieldOrder) => {
-    if(fieldOrder === ''){
+    if(fieldOrder === '')
       return undefined;             // Return undefined to sort function.
-    }
-    else if(fieldOrder === '↑') {   // Ascending order.
+    else {
       return (a, b) => {
-        if (typeof a === 'string') {
+        if (typeof a[field] === 'string') {
           if (a[field].toLowerCase() < b[field].toLowerCase())
-            return -1;
+            if(fieldOrder === '↑') return -1;
+            else return 1;
+
           else if (a[field].toLowerCase() > b[field].toLowerCase())
-            return 1;
-          else
-            return 0;
+            if(fieldOrder === '↑') return 1;
+            else return -1;
+
+          else return 0;
         }
         else {
           if (a[field] < b[field])
-            return -1;
+            if(fieldOrder === '↑') return -1;
+            else return 1;
+
           else if (a[field] > b[field])
-            return 1;
-          else
-            return 0;
-        }
-      }
-    }
-    else if(fieldOrder === '↓') {   // Descending order.
-      return (a, b) => {
-        if (typeof a === 'string') {
-          if (a[field].toLowerCase() > b[field].toLowerCase())
-            return -1;
-          else if (a[field].toLowerCase() < b[field].toLowerCase())
-            return 1;
-          else
-            return 0;
-        }
-        else {
-          if (a[field] > b[field])
-            return -1;
-          else if (a[field] < b[field])
-            return 1;
-          else
-            return 0;
+            if(fieldOrder === '↑') return 1;
+            else return -1;
+
+          else return 0;
         }
       }
     }
@@ -262,9 +247,9 @@ function App() {
               <tbody id="bodyTable">
                 <TableStories list={stories.data}
                               onRemoveItem={handleRemoveStory}
-                              onFunctionOrder={handleFunctionOrder}
                               order={order}
-                              onOrder={handleArrowField} />
+                              onOrder={handleArrowField}
+                              onFunctionOrder={handleFunctionOrder} />
               </tbody>
             </table>
 

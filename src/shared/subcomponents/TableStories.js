@@ -3,8 +3,7 @@ import RowStory from "./RowStory";
 
 
 // Subcomponent TableStories (as memo function):
-const TableStories = memo(function ({ list, onRemoveItem, 
-                                      onFunctionOrder, order, onOrder }) {
+const TableStories = memo(function ({ list, onRemoveItem, order, onOrder, onFunctionOrder }) {
    return (
     <>
       <tr className="rowStoriesHead">
