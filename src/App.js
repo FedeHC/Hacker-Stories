@@ -72,7 +72,7 @@ function App() {
     switch (action.type) {
       case 'TITLE':
         return {
-          title: state.title === '↑' ? '↓' : '↑',
+          title: state.title === '▲' ? '▼' : '▲',
           author: '',
           created_at: '',
           num_comments: '',
@@ -82,7 +82,7 @@ function App() {
       case 'AUTHOR':
         return {
           title: '',
-          author: state.author === '↑' ? '↓' : '↑',
+          author: state.author === '▲' ? '▼' : '▲',
           created_at: '',
           num_comments: '',
           points: '',
@@ -92,7 +92,7 @@ function App() {
         return {
           title: '',
           author: '',
-          created_at: state.created_at === '↑' ? '↓' : '↑',
+          created_at: state.created_at === '▲' ? '▼' : '▲',
           num_comments: '',
           points: '',
           lastField: action.type.toLowerCase()
@@ -102,7 +102,7 @@ function App() {
           title: '',
           author: '',
           created_at: '',
-          num_comments: state.num_comments === '↑' ? '↓' : '↑',
+          num_comments: state.num_comments === '▲' ? '▼' : '▲',
           points: '',
           lastField: action.type.toLowerCase()
         };
@@ -112,7 +112,7 @@ function App() {
           author: '',
           created_at: '',
           num_comments: '',
-          points: state.points === '↑' ? '↓' : '↑',
+          points: state.points === '▲' ? '▼' : '▲',
           lastField: action.type.toLowerCase()
         };
       default:
@@ -126,7 +126,7 @@ function App() {
       author: '',
       created_at: '',
       num_comments: '',
-      points: '↑',
+      points: '▲',
       lastField: ''
     };
   
@@ -190,22 +190,22 @@ function App() {
       return (a, b) => {
         if (typeof a[field] === 'string') {
           if (a[field].toLowerCase() < b[field].toLowerCase())
-            if(fieldOrder === '↑') return -1;
+            if(fieldOrder === '▲') return -1;
             else return 1;
 
           else if (a[field].toLowerCase() > b[field].toLowerCase())
-            if(fieldOrder === '↑') return 1;
+            if(fieldOrder === '▲') return 1;
             else return -1;
 
           else return 0;
         }
         else {
           if (a[field] < b[field])
-            if(fieldOrder === '↑') return -1;
+            if(fieldOrder === '▲') return -1;
             else return 1;
 
           else if (a[field] > b[field])
-            if(fieldOrder === '↑') return 1;
+            if(fieldOrder === '▲') return 1;
             else return -1;
 
           else return 0;
