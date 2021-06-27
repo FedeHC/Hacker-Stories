@@ -2,7 +2,7 @@
 
 Otra app creada en React que obtiene historias de [Hacker News](https://news.ycombinator.com/) de acuerdo a un término de búsqueda y muestra luego los resultados en formato de tabla.
 
-![Imagen](https://raw.githubusercontent.com/FedeHC/Hacker-Stories/master/shared/img/imagen-app.png)
+![Imagen](https://raw.githubusercontent.com/FedeHC/Hacker-Stories/master/src/shared/img/image-app.png)
 
 La app fue creada siguiendo en gran parte a mis lecturas del libro [The Road to React](https://github.com/the-road-to-learn-react), aunque con algunas modificaciones propias que consideré apropiadas.
 
