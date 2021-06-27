@@ -1,15 +1,29 @@
-# Getting Started with Create React App
+# Hacker Stories
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Otra app creada en React que obtiene historias de [Hacker News](https://news.ycombinator.com/) de acuerdo a un término de búsqueda y muestra luego los resultados en formato de tabla.
 
-## Available Scripts
+![Imagen](https://raw.githubusercontent.com/FedeHC/Hacker-Stories/master/shared/img/imagen-app.png)
 
-In the project directory, you can run:
+La app fue creada siguiendo en gran parte a mis lecturas del libro [The Road to React](https://github.com/the-road-to-learn-react), aunque con algunas modificaciones propias que consideré apropiadas.
 
-### `npm start`
+## Instalación y ejecución
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+* Descargar o clonar el presente repositorio;
+* Entrar a la carpeta donde se descargó el mismo;
+* Ejecutar desde la terminal lo sig. para instalar las dependencias necesarias:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```node
+npm install
+```
+
+Para ejecutarlo basta solamente con:
+
+```node
+npm run start
+```
+
+La app se iniciará en el navegador web como localhost.
+
+## Requisitos
+
+Solo es necesario un navegador web y tener instalador [node](https://nodejs.org/en/) (v14 en adelante).
