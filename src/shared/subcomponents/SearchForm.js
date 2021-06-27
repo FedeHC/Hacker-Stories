@@ -2,13 +2,14 @@ import InputWithLabel from "./InputWithLabel";
 
 
 // Subcomponent SearchForm:
-const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit }) => (
+const SearchForm = ({ searchTerm, onSearchInput, onSearchSubmit, dataList }) => (
   <>
     <form onSubmit={onSearchSubmit}>
       <InputWithLabel id="searchInput"
                       value={searchTerm}
                       type="text"
                       onInputChange={onSearchInput}
+                      dataList={dataList}
                       isFocused={true}
       >Search:</InputWithLabel>
 

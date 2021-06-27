@@ -27,12 +27,12 @@ const TableStories = memo(function ({ list, onRemoveItem, order, onOrder, onFunc
         <th>Actions</th>
       </tr>
 
-      {list.sort(onFunctionOrder(order.lastField, order[order.lastField])).map((item, index) => (
+      {list.sort(onFunctionOrder(order.lastField, order[order.lastField])).map( (item, index) => 
         <RowStory key={item.objectID}
                   item={item}
                   index={index}
                   onRemoveItem={onRemoveItem} />
-      ))}
+      )}
     </>
   )
 });

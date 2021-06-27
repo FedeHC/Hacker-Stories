@@ -10,13 +10,17 @@ import SearchForm from "./shared/subcomponents/SearchForm";
 import TableStories from "./shared/subcomponents/TableStories";
 import { API_ENDPOINT } from "./shared/urls";
 
+const DEFAULT_SEARCH = "React";
 
 function App() {
   // Using custom hook for keeping record of the input value:
-  const [searchTerm, setSearchTerm] = useSemiPersistentState("search", "React");
+  const [searchTerm, setSearchTerm] = useSemiPersistentState("search", DEFAULT_SEARCH);
 
   // URL state:
   const [url, setUrl] = useState(`${API_ENDPOINT}${searchTerm}`);
+
+  // dataList (for input) state:
+  const [dataList, setdataList] = useState([DEFAULT_SEARCH]); // Array with a first value.
 
   // Reducer stories function:
   const storiesReducer = (state, action) => {
@@ -126,7 +130,7 @@ function App() {
       author: '',
       created_at: '',
       num_comments: '',
-      points: '▲',
+      points: '▲',                    // 'points' is the default order in the first fetch.
       lastField: ''
     };
   
@@ -165,8 +169,19 @@ function App() {
   };
 
   const handleSearchSubmit = (event) => {
-    setUrl(`${API_ENDPOINT}${searchTerm}`);
     event.preventDefault();
+
+    setUrl(`${API_ENDPOINT}${searchTerm}`);
+ 
+    if(!(dataList.includes(searchTerm))) {    // if searchTerm is NOT in dataList...
+      let newDataList = [...dataList];
+      newDataList.unshift(searchTerm);        // 'unshift' mutates newDataList.
+      
+      if(newDataList.length > 5)
+       newDataList = newDataList.slice(0,5)   // Keep array to five (5) elements.
+
+      setdataList(newDataList);               // Add searchTerm in array as 1° element.
+    }
   };
 
   // Using useCallback to disable re-rendering if inputSearch changes:
@@ -217,7 +232,7 @@ function App() {
   // --------------------------------------------------------------------------
   // JSX
   // --------------------------------------------------------------------------
-  
+
   return (
     <>
       <img src={logo} className="imageLogo" alt="" />
@@ -242,7 +257,9 @@ function App() {
           <>
             <SearchForm searchTerm={searchTerm}
                         onSearchInput={handleSearchInput}
-                        onSearchSubmit={handleSearchSubmit} />
+                        onSearchSubmit={handleSearchSubmit}
+                        dataList={dataList} />
+
             <table className="tableStories">
               <tbody id="bodyTable">
                 <TableStories list={stories.data}
