@@ -73,49 +73,42 @@ function App() {
 
   // Reducer order function:
   const orderReducer = (state, action) => {
+    const cleanOrderObj = {
+      title: '',
+      author: '',
+      created_at: '',
+      num_comments: '',
+      points: '',
+    };
+
     switch (action.type) {
       case 'TITLE':
         return {
+          ...cleanOrderObj,
           title: state.title === '▲' ? '▼' : '▲',
-          author: '',
-          created_at: '',
-          num_comments: '',
-          points: '',
           lastField: action.type.toLowerCase()
         };
       case 'AUTHOR':
         return {
-          title: '',
+          ...cleanOrderObj,
           author: state.author === '▲' ? '▼' : '▲',
-          created_at: '',
-          num_comments: '',
-          points: '',
           lastField: action.type.toLowerCase()
         };
       case 'CREATED_AT':
         return {
-          title: '',
-          author: '',
+          ...cleanOrderObj,
           created_at: state.created_at === '▲' ? '▼' : '▲',
-          num_comments: '',
-          points: '',
           lastField: action.type.toLowerCase()
         };
       case 'NUM_COMMENTS':
         return {
-          title: '',
-          author: '',
-          created_at: '',
+          ...cleanOrderObj,
           num_comments: state.num_comments === '▲' ? '▼' : '▲',
-          points: '',
           lastField: action.type.toLowerCase()
         };
       case 'POINTS':
         return {
-          title: '',
-          author: '',
-          created_at: '',
-          num_comments: '',
+          ...cleanOrderObj,
           points: state.points === '▲' ? '▼' : '▲',
           lastField: action.type.toLowerCase()
         };
@@ -130,7 +123,7 @@ function App() {
       author: '',
       created_at: '',
       num_comments: '',
-      points: '▲',                    // 'points' is the default order in the first fetch.
+      points: '▼',                    // 'points' is the default order in the first fetch.
       lastField: ''
     };
   
