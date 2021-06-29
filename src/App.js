@@ -261,7 +261,7 @@ function App() {
         }
 
         {/* Show while LOADING */}
-        {!stories.isOnInit && stories.isLoading && <p className="subTitle">Loading...</p>}
+        {!stories.isOnInit && stories.isLoading && <p className="subTitle">Loading new data...</p>}
 
         {/* Show when LOADED */}
         {!stories.isOnInit && !stories.isLoading && !stories.isError &&
