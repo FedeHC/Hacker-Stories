@@ -16,6 +16,9 @@ function App() {
   // Using custom hook for keeping record of the input value:
   const [searchTerm, setSearchTerm] = useSemiPersistentState("search", DEFAULT_SEARCH);
 
+  // Page state:
+  const [page, setPage] = useState(0);
+
   // URL state:
   const [url, setUrl] = useState(`${API_ENDPOINT}${searchTerm}`);
 
@@ -28,32 +31,34 @@ function App() {
       case 'STORIES_FETCH_INIT':
         return {
           ...state,
-          isOnInit: false,
-          isLoading: true,            // Setting loading condition.
-          isError: false,
+          isOnInit: false,            // Finish init condition.
+          isLoading: true,            // Start load condition.
         };
       case 'STORIES_FETCH_SUCCESS':
         return {
           ...state,
-          isOnInit: false,
-          isLoading: false,
-          isError: false,
           data: action.payload,       // Updating array with results.
+          isLoading: false,
         };
       case 'STORIES_FETCH_FAILURE':
         return {
           ...state,
-          isOnInit: false,
-          isLoading: false,
-          isError: true,              // Setting error condition.
-          errorMsg: action.payload,   // Return string with error message.
+          isLoading: false,           // Finish loading condition.
+          isError: true,              // Start error condition.
+          errorMsg: action.payload,   // Set error string message.
         };
-      case 'REMOVE_STORY':
+      case 'STORY_REMOVE':
         return {
           ...state,
           data: state.data.filter((story) =>
             action.payload.objectID !== story.objectID
           ),
+        };
+      case 'STORIES_ADD_PAGE':
+        return {
+          ...state,
+          data: [...state.data, ...action.payload],
+          isLoading: false
         };
       default:
         throw new Error();
@@ -63,9 +68,10 @@ function App() {
   // Reducer initial stories object :
   const reducerStoriesObj = {
     data: [],
-    isOnInit: true,
+    isOnInit: true,                   // On true at initializing.
     isLoading: false,
-    isError: false
+    isError: false,
+    errorMsg: null
   };
 
   // useReducer for fetched stories:
@@ -135,25 +141,35 @@ function App() {
   // Handlers
   // --------------------------------------------------------------------------
 
-  const handleFetchStories = useCallback(async () => {
-    dispatchStories({ type: 'STORIES_FETCH_INIT' });  // Call dispatch to change to loading state.
+  const handleFetchStories = useCallback(async (newPg) => {       // newPage has a value if user clicks 'Show more stories!' button.
+    dispatchStories({ type: 'STORIES_FETCH_INIT' });              // Change to loading condition.
 
     try {
-      const result = await axios.get(url);            // And fetch stories from HN's API.
-      dispatchStories(
-        {
-          type: 'STORIES_FETCH_SUCCESS',
-          payload: result.data.hits,
-        });
-    } catch (error) {                                 // Catch any errors while fetching data.
+      if(newPg) {
+        setPage(newPg);                                           // Increment page count.
+        const results = await axios.get(`${url}&page=${newPg}`);  // Fetch data from HN.
+        dispatchStories(                                          // Dispatch data to useReducer.
+          {
+            type: 'STORIES_ADD_PAGE',
+            payload: results.data.hits,
+          });
+      }
+      else {
+        const results = await axios.get(`${url}&page=0`);         // Fetch data from HN.
+        dispatchStories(                                          // Dispatch data to useReducer.
+          {
+            type: 'STORIES_FETCH_SUCCESS',
+            payload: results.data.hits,
+          });
+      }
+    } catch (error) {                                             // Catch any fetch errors.
       dispatchStories(
         {
           type: 'STORIES_FETCH_FAILURE',
           payload: error.message,
         });
     }
-  }, [url]);                                          // Only fetch again if URL with searchTerm changes.
-
+  }, [url]);                                                      // Only fetch again if URL and page changes.
   useEffect(() => {
     handleFetchStories();
   }, [handleFetchStories]);
@@ -165,7 +181,7 @@ function App() {
   const handleSearchSubmit = (event) => {
     event.preventDefault();
 
-    setUrl(`${API_ENDPOINT}${searchTerm}`);
+    setUrl(`${API_ENDPOINT}${searchTerm}&page=${page}`);
  
     if(!(dataList.includes(searchTerm))) {    // if searchTerm is NOT in dataList...
       let newDataList = [...dataList];
@@ -181,7 +197,7 @@ function App() {
   // Using useCallback to disable re-rendering if inputSearch changes:
   const handleRemoveStory = useCallback( (item) => {
     dispatchStories({
-      type: 'REMOVE_STORY',
+      type: 'STORY_REMOVE',
       payload: item,
     });
   }, []);
@@ -189,7 +205,7 @@ function App() {
   // Functions for showing arrows on top of the columns for ordering (if clicked): 
   const handleArrowField = (field) => {
     dispatchOrder({ type: field.toUpperCase()})
-  }
+  };
 
   // Function for the sort array function:
   const handleFunctionOrder = (field, fieldOrder) => {
@@ -221,7 +237,7 @@ function App() {
         }
       }
     }
-  }
+  };
 
   // --------------------------------------------------------------------------
   // JSX
@@ -265,6 +281,14 @@ function App() {
               </tbody>
             </table>
 
+            <br/><br/>
+
+            <div className="moreStoriesDiv">
+              <button id="moreStoriesButton"
+                      type="button"
+                      onClick={ () => handleFetchStories(page+1)}
+              >Show more stories!</button>
+            </div>
             <br/>
           </>
         }

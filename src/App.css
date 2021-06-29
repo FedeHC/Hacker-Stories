@@ -190,3 +190,29 @@
   display: inline;
   font-size: 17px;
 }
+
+.moreStoriesDiv {
+  text-align: center;
+}
+
+#moreStoriesButton {
+  background-color: white;
+  color: #272822;
+  font-size: 18px;
+  border: 0;
+  outline: 1px solid #ff6600;
+  border-radius: 5px;
+  padding: 4px 10px 2px 10px;
+  margin: 0 0 0 10px;
+  transition: all 0.15s ease-in;
+}
+
+#moreStoriesButton:hover {
+  background-color: #ffd0b0;
+  outline: 2px solid #ff6600;
+  transition: all 0.15s ease-in;
+}
+
+#moreStoriesButton:active {
+  background-color: #ff6600;
+}
