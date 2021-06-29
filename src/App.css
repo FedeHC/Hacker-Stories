@@ -1,8 +1,7 @@
 .imageLogo {
-  display: block;
-  grid-column: 2 / 3;
-  width: 50px;
-  margin: 0 0 0 18px;
+  display: inline;
+  width: 30px;
+  margin: 0 3px -5px 0;
   background-image: url("./shared/img/favicon.png") no-repeat;
 }
 
@@ -11,8 +10,14 @@
   border-radius: 10px;
   background-color: whitesmoke;
   color: #272822;
-  margin: 10px 0 20px 20px;
+  margin: 20px 0 0 0;
   padding: 0px 30px 30px 30px;
+}
+
+.titleApp {
+  display: inline;
+  font-size: 30px;
+  font-weight: bolder;
 }
 
 .subTitle{
@@ -159,4 +164,29 @@
 .buttonSpan:hover .buttonTooltip {
   visibility: visible;
   transition: all 0.15s ease-in;
+}
+
+.divFooter {
+  grid-column: 2 / 3;
+  background-color: whitesmoke;
+  color: #272822;
+  border-radius: 10px;
+  margin: 30px 0 30px 0;
+  padding: 10px;
+  font-weight: bolder;
+  width: 220px;
+  text-align: center;
+}
+
+.imageLogoFooter {
+  display: inline;
+  width: 20px;
+  margin: 0 3px -3px 0;
+  padding: 0;
+  background-image: url("./shared/img/favicon.png") no-repeat;
+}
+
+.titleFooter {
+  display: inline;
+  font-size: 16px;
 }

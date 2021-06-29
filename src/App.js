@@ -79,6 +79,7 @@ function App() {
       created_at: '',
       num_comments: '',
       points: '',
+      lastfield: ''
     };
 
     switch (action.type) {
@@ -123,7 +124,7 @@ function App() {
       author: '',
       created_at: '',
       num_comments: '',
-      points: '▼',                    // 'points' is the default order in the first fetch.
+      points: '▼',                    // 'points' is the default order at first fetch.
       lastField: ''
     };
   
@@ -227,11 +228,12 @@ function App() {
   // --------------------------------------------------------------------------
 
   return (
-    <>
-      <img src={logo} className="imageLogo" alt="" />
-  
+    <> 
       <div className="divApp">
-        <h1>Hacker Stories</h1>
+        <br/>
+        <img src={logo} className="imageLogo" alt="" />
+        <h1 className="titleApp">Hacker Stories</h1>
+        <br/><br/>
 
         {/* Show if ERROR */}
         {!stories.isOnInit && stories.isError &&
@@ -267,6 +269,13 @@ function App() {
           </>
         }
       </div>
+    
+      {!stories.isOnInit && !stories.isLoading &&
+        <div className="divFooter">
+          <img src={logo} className="imageLogoFooter" alt="" />
+          <h1 className="titleFooter">Por FedeHC - 2021</h1>
+        </div>
+      }
     </>
   );
 }

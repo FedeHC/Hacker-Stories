@@ -4,7 +4,7 @@ Otra app creada en React que obtiene historias de [Hacker News](https://news.yco
 
 ![Imagen](https://raw.githubusercontent.com/FedeHC/Hacker-Stories/master/src/shared/img/image-app.png)
 
-La app fue creada siguiendo en gran parte a mis lecturas del libro [The Road to React](https://github.com/the-road-to-learn-react), aunque con algunas modificaciones propias que consideré apropiadas.
+La app fue creada siguiendo en gran parte a mis lecturas del libro [The Road to React](https://github.com/the-road-to-learn-react), aunque con varias modificaciones que consideré apropiadas.
 
 ## Instalación y ejecución
 
