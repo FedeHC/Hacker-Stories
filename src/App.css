@@ -1,7 +1,7 @@
 .imageLogo {
   display: inline;
   width: 30px;
-  margin: 0 3px -5px 0;
+  margin: 0 3px -6px 0;
   background-image: url("./shared/img/favicon.png") no-repeat;
 }
 
@@ -16,7 +16,7 @@
 
 .titleApp {
   display: inline;
-  font-size: 30px;
+  font-size: 26px;
   font-weight: bolder;
 }
 
@@ -181,12 +181,12 @@
 .imageLogoFooter {
   display: inline;
   width: 20px;
-  margin: 0 3px -3px 0;
+  margin: 0 3px -4px 0;
   padding: 0;
   background-image: url("./shared/img/favicon.png") no-repeat;
 }
 
 .titleFooter {
   display: inline;
-  font-size: 16px;
+  font-size: 17px;
 }
